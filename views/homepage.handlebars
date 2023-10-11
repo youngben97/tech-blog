@@ -1,0 +1,20 @@
+{{#if blogposts.length}}
+{{#each blogposts as |blogpost| }}
+    <div class="row mb-4 project">
+        <div class="col-md-5">
+            <h2>
+                <a href="/blog/{{blogpost.id}}">{{blogpost.title}}</a>
+            </h2>
+            <p> Created by {{blogpost.user.username}} on {{format_date blogpost.date_created}}</p>
+        </div>
+        <div class="col-md-7">
+            <p>
+                {{blogpost.content}}
+            </p>
+        </div>
+    </div>
+{{/each}}
+{{/if}}
+
+{{!-- <script src="./js/homepage.js"></script> --}}
+{{!-- write the above script --}}
