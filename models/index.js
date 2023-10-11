@@ -6,6 +6,10 @@ User.hasMany(BlogPost, {
     foreignKey: { model: User, foreignKey: 'id' }
 });
 
+User.hasMany(Comment, {
+    foreignKey: { model: User, foreignKey: 'id'}
+})
+
 BlogPost.belongsTo(User, {
     foreignKey: { model: User, foreignKey: 'id'}
 });
@@ -15,8 +19,12 @@ Comment.belongsTo(User, {
 });
 
 BlogPost.hasMany(Comment, {
-    foreignkey: { model: BlogPost, foreignKey: 'id'}
+    foreignKey: { model: BlogPost, foreignKey: 'id'}
 });
+
+Comment.belongsTo(BlogPost, {
+    foreignKey: {model: BlogPost, foreignKey: 'id'}
+})
 
 module.exports = {
     User,
