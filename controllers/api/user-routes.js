@@ -1,32 +1,34 @@
 const router = require('express').Router();
-const { User, BlogPost } = require('../../models');
+const { User, BlogPost, Comment } = require('../../models');
 
-// router.get('/', async (req, res) => {
-//   try {
-//     const dbUserData = await User.findAll();
+router.get('/', async (req, res) => {
+  try {
+    const dbUserData = await User.findAll();
 
-//     res.status(200).json(dbUserData);
-//   } catch (err) {
-//     res.status(500).json(err);
-//   }
-// })
+    res.status(200).json(dbUserData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+})
 
-// router.get('/:id', async (req, res) => {
-//   try {
-//       const userData = await User.findByPk(req.params.id, {
-//         include: [{ model: BlogPost }]
-//       });
+router.get('/:id', async (req, res) => {
+  try {
+      const userData = await User.findByPk(req.params.id, {
+        include: [
+          { model: BlogPost},
+          { model: Comment}]
+      });
 
-//       if(!userData) {
-//       res.status(404).json({ message: 'No user found with this id'});
-//       return
-//       };
+      if(!userData) {
+      res.status(404).json({ message: 'No user found with this id'});
+      return
+      };
 
-//       res.status(200).json(userData);
-//   } catch (err) {
-//       res.status(500).json(err);
-//   }
-// });
+      res.status(200).json(userData);
+  } catch (err) {
+      res.status(500).json(err);
+  }
+});
 
 // CREATE new user
 router.post('/', async (req, res) => {

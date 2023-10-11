@@ -19,35 +19,38 @@ router.get('/', async (req, res) => {
 
 //find a specific blogpost and include associated user and comments
 router.get('/:id', async (req, res) => {
-    try {
-        const blogData = await BlogPost.findByPk(req.params.id, {
-          include: [
-            { model: User, attributes: ['id', 'username']},
-            { model: Comment, attributes: ['id', 'comment']},
-          ],
-          // attributes: {exclude: ['user_id']}  
-        });
+  try {
+    const blogData = await BlogPost.findOne({
+      where: { id: req.params.id },
+      include: [
+        { model: User },
+        { model: Comment },
+      ],
+    });
 
-        if(!blogData) {
-            res.status(404).json({ message: 'No blog post found with this id.'});
-            return
-          };
+      if (!blogData) {
+          res.status(404).json({ message: 'No blog post found with this id.' });
+          return;
+      }
 
-        res.status(200).json(blogData);
-      } catch (err) {
-        res.status(500).json(err);
-    }
+      res.status(200).json(blogData);
+  } catch (err) {
+      res.status(500).json(err);
+  }
 });
 
 //create a blogpost
 router.post('/', async (req, res) => {
   try {
+    console.log(req.body);
     const blogData = await BlogPost.create({
-      ...req.body,
+      title: req.body.title,
+      content: req.body.content,
       user_id: req.session.user_id,
     });
     res.status(200).json(blogData);
   } catch (err) {
+    console.error(err)
     res.status(500).json(err);
   }
 });
@@ -68,7 +71,7 @@ router.put('/:id', async (req, res) => {
 })
 
 //delete a blogpost
-router.delete(':/id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const blogData = await BlogPost.destroy({
             where: {

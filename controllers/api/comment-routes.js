@@ -17,17 +17,35 @@ router.get('/', async (req, res) => {
 });
 
 //get comment by id along with associated user
+// router.get('/:id', async (req, res) => {
+//     try {
+//         const commentData = await Comment.findByPk(req.params.id, {
+//             include: [{ model: User, attributes: ['id', 'username']}],
+//             // attribubtes: { exclude: ['user_id'] }
+//         });
+
+//         if(!commentData) {
+//         res.status(404).json({ message: 'No comment found with this id'});
+//         return
+//         };
+
+//         res.status(200).json(commentData);
+//     } catch (err) {
+//         res.status(500).json(err);
+//     }
+// });
+
 router.get('/:id', async (req, res) => {
     try {
-        const commentData = await Comment.findByPk(req.params.id, {
-            include: [{ model: User, attributes: ['id', 'username']}],
-            // attribubtes: { exclude: ['user_id'] }
+        const commentData = await Comment.findOne({
+            where: { id: req.params.id },
+            include: [{ model: User }]
         });
 
-        if(!commentData) {
-        res.status(404).json({ message: 'No comment found with this id'});
-        return
-        };
+        if (!commentData) {
+            res.status(404).json({ message: 'No comment found with this id' });
+            return;
+        }
 
         res.status(200).json(commentData);
     } catch (err) {
@@ -38,7 +56,12 @@ router.get('/:id', async (req, res) => {
 //create a comment
 router.post('/', async (req, res) => {
     try {
-        const commentData = await Comment.create(req.body);
+        console.log(req.body);
+        const commentData = await Comment.create({
+            comment: req.body.comment,
+            user_id: req.session.user_id,
+            blogpost_id: req.body.blogpost_id
+        });
         res.status(200).json(commentData);
       } catch (err) {
         res.status(500).json(err);

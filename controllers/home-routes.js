@@ -22,14 +22,20 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/blog/:id', async (req, res) => {
+router.get('/blogs/:id', async (req, res) => {
     try {
-        const blogpostData = await BlogPost.findByPk(req.params.id, {
+        const blogpostData = await BlogPost.findOne({
+            where: { id: req.params.id },
             include: [
-                { model : User, attributes: ['username']},
-                { model: Comment, attributes: ['comment']}
+                { model: User },
+                { model: Comment }
             ]
         });
+
+        if (!blogpostData) {
+            res.status(404).send('Blog post not found');
+            return;
+        }
 
         const blogpost = blogpostData.get({ plain: true });
 
