@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
             include: [
                 { model: User, attributes: ['id', 'username']}
             ],
-            attributes: { exclude: ['user_id']}
+            // attributes: { exclude: ['user_id']}
         });
         res.status(200).json(commentData);
     } catch (err) {
@@ -21,7 +21,7 @@ router.get('/:id', async (req, res) => {
     try {
         const commentData = await Comment.findByPk(req.params.id, {
             include: [{ model: User, attributes: ['id', 'username']}],
-            attribubtes: { exclude: ['user_id'] }
+            // attribubtes: { exclude: ['user_id'] }
         });
 
         if(!commentData) {

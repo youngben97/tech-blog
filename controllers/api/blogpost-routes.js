@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
             { model: User, attributes: ['id', 'username']},
             { model: Comment, attributes: ['id', 'comment']},
           ],
-          attributes: {exclude: ['user_id']}  
+          // attributes: {exclude: ['user_id']}  
         });
         res.status(200).json(blogData);
     } catch (err) {
@@ -25,7 +25,7 @@ router.get('/:id', async (req, res) => {
             { model: User, attributes: ['id', 'username']},
             { model: Comment, attributes: ['id', 'comment']},
           ],
-          attributes: {exclude: ['user_id']}  
+          // attributes: {exclude: ['user_id']}  
         });
 
         if(!blogData) {
@@ -42,7 +42,10 @@ router.get('/:id', async (req, res) => {
 //create a blogpost
 router.post('/', async (req, res) => {
   try {
-    const blogData = await BlogPost.create(req.body);
+    const blogData = await BlogPost.create({
+      ...req.body,
+      user_id: req.session.user_id,
+    });
     res.status(200).json(blogData);
   } catch (err) {
     res.status(500).json(err);

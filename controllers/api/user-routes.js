@@ -1,47 +1,60 @@
 const router = require('express').Router();
-const { User } = require('../../models');
+const { User, BlogPost } = require('../../models');
 
-router.get('/', async (req, res) => {
-  try {
-    const dbUserData = await User.findAll();
+// router.get('/', async (req, res) => {
+//   try {
+//     const dbUserData = await User.findAll();
 
-    res.status(200).json(dbUserData);
-  } catch (err) {
-    res.status(500).json(err);
-  }
-})
+//     res.status(200).json(dbUserData);
+//   } catch (err) {
+//     res.status(500).json(err);
+//   }
+// })
+
+// router.get('/:id', async (req, res) => {
+//   try {
+//       const userData = await User.findByPk(req.params.id, {
+//         include: [{ model: BlogPost }]
+//       });
+
+//       if(!userData) {
+//       res.status(404).json({ message: 'No user found with this id'});
+//       return
+//       };
+
+//       res.status(200).json(userData);
+//   } catch (err) {
+//       res.status(500).json(err);
+//   }
+// });
 
 // CREATE new user
 router.post('/', async (req, res) => {
     try {
-      const dbUserData = await User.create({
-        username: req.body.username,
-        email: req.body.email,
-        password: req.body.password
-      });
-      const newUser = dbUserData.get({ plain: true });
+      const userData = await User.create(req.body);
+
       req.session.save(() => {
-        req.session.loggedIn = true;
-        req.session.username = req.body.username;
-        req.session.user_id = newUser.id;
-  
-        return res.status(200).json(dbUserData);
-      });
+        req.session.user_id = userData.id;
+        req.session.logged_in = true;
+
+        res.status(200).json(userData);
+      })
     } catch (err) {
-      console.error(err);
-      return res.status(500).json(err);
+      return res.status(400).json(err);
     }
   });
 
 // user login
+//this differes from example w/ usename instead of email - change if you have to
 router.post('/login', async (req, res) => {
   try {
-    const userData = await User.findOne({ where: { email: req.body.email } });
+    console.log('Entering /login route');
+    const userData = await User.findOne({ where: { username: req.body.username } });
 
     if (!userData) {
       res
         .status(400)
-        .json({ message: 'Incorrect email or password, please try again' });
+        .json({ message: 'Incorrect username or password, please try again' });
       return;
     }
 
@@ -50,7 +63,7 @@ router.post('/login', async (req, res) => {
     if (!validPassword) {
       res
         .status(400)
-        .json({ message: 'Incorrect email or password, please try again' });
+        .json({ message: 'Incorrect username or password, please try again' });
       return;
     }
 
@@ -59,7 +72,8 @@ router.post('/login', async (req, res) => {
       req.session.user_id = userData.id;
       req.session.logged_in = true;
       
-      res.json({ user: userData, message: 'You are now logged in!' });
+      
+      return res.json({ user: userData, message: 'You are now logged in!' });
     });
 
   } catch (err) {

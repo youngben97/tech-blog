@@ -4,17 +4,17 @@ const withAuth = require('../utils/auth');
 
 router.get('/', async (req, res) => {
     try {
-        const blogData = await BlogPost.findAll({
+        const blogpostData = await BlogPost.findAll({
             include: [
                 { model: User, attributes: ['username']},
                 { model: Comment, attributes: ['comment']}
             ]
         });
 
-        const blogs = blogData.map((blog) => blog.get({ plain : true}));
+        const blogposts = blogpostData.map((blogpost) => blogpost.get({ plain : true}));
 
         res.render('homepage', {
-            blogs,
+            blogposts,
             logged_in: req.session.logged_in
         });
     } catch (err) {
@@ -24,17 +24,17 @@ router.get('/', async (req, res) => {
 
 router.get('/blog/:id', async (req, res) => {
     try {
-        const blogData = await BlogPost.findByPk(req.params.id, {
+        const blogpostData = await BlogPost.findByPk(req.params.id, {
             include: [
                 { model : User, attributes: ['username']},
                 { model: Comment, attributes: ['comment']}
             ]
         });
 
-        const blog = blogData.get({ plain: true });
+        const blogpost = blogpostData.get({ plain: true });
 
         res.render('blog', {
-            ...blog,
+            ...blogpost,
             logged_in: req.session.logged_in
         });
     } catch (err) {
@@ -43,6 +43,7 @@ router.get('/blog/:id', async (req, res) => {
 });
 
 router.get('/dashboard', withAuth, async (req, res) => {
+    console.log('Entering /dashboard route handler');
     try {
         const userData = await User.findByPk(req.session.user_id, {
             attributes: { exclude: ['password'] },
@@ -53,20 +54,25 @@ router.get('/dashboard', withAuth, async (req, res) => {
 
         res.render('dashboard', {
             ...user,
-            logged_in: true
+            logged_in: req.session.logged_in
         });
+    console.log('Exiting /dashboard route handler');
     } catch (err) {
+        console.error(err);
         res.status(500).json(err)
     }
 });
 
 router.get('/login', (req, res) => {
+    console.log('Entering /dashboard');
+    // If the user is already logged in, redirect the request to another route
     if (req.session.logged_in) {
-        res.redirect('/dashboard');
-        return;
+    console.log('Before Redirect');
+      res.redirect('/dashboard');
+      return;
     }
-
+  
     res.render('login');
-});
+  });
 
 module.exports = router;
