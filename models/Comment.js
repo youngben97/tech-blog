@@ -4,7 +4,7 @@ const sequelize = require('../config/connection.js');
 
 class Comment extends Model {}
 
-//add date
+
 Comment.init(
     {
         id: {
@@ -24,6 +24,13 @@ Comment.init(
                 key: 'id'
             }
         },
+        blogpost_id: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'blogpost',
+                key: 'id'
+            }
+        }
     },
     {
         sequelize,
