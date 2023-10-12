@@ -24,7 +24,7 @@ router.get('/:id', async (req, res) => {
       where: { id: req.params.id },
       include: [
         { model: User },
-        { model: Comment },
+        { model: Comment, include: [User] },
       ],
     });
 
@@ -35,6 +35,7 @@ router.get('/:id', async (req, res) => {
 
       res.status(200).json(blogData);
   } catch (err) {
+      console.error(err);
       res.status(500).json(err);
   }
 });

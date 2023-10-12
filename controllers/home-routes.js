@@ -28,7 +28,7 @@ router.get('/blogs/:id', async (req, res) => {
             where: { id: req.params.id },
             include: [
                 { model: User },
-                { model: Comment }
+                { model: Comment, include: [User] }
             ]
         });
 
