@@ -4,17 +4,122 @@
 
 /* change the above so it fits this (change project class) */
 
+:root {
+    --primary: #ffde01;
+    --secondary: #ffe534;
+    --tertiary:	#ffe534;
+    --quaternary:#fff299;
+    --light: #fff8cc;
+    --dark: #2f3b1c;
+    --error: #f00;
+    --border-color: #2f3b1c;
+    --border-radius: 0.3rem;
+  }
+
+body {
+    font-family: Helvetica, Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--light);
+}
+
+header {
+    width: 100%;
+    padding: 5px 20px;
+    text-align: left;
+    background: var(--primary);
+    color: var(--light);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.header-title {
+    border: 2px solid var(--dark);
+    border-radius: 25px;
+    padding: 5px;
+    background-color: var(--quaternary);
+}
+
+main {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-top: 10px;
+}
+
+a {
+    color: var(--dark);
+    text-decoration: none;
+}
+
+nav {
+    width: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.blog-header {
+    width:100%;
+    display: flex;
+    flex-direction: row;
+    border-radius: 10px 10px 0 0;
+    justify-content: space-between;
+    padding: 5px;
+    color: white;
+    background-color:black;
+}
+
+.blog-link {
+    color: white;
+    margin-bottom: 0px;
+    padding: 5px;
+}
+
+.blog-content {
+    border: 2px solid var(--dark);
+    border-radius: 0 0 10px 10px;
+    background-color: whitesmoke;
+    padding: 5px;
+}
+
+.nav-button {
+    border: 2px solid var(--dark);
+    border-radius: 25px;
+    padding: 5px;
+    background-color: var(--quaternary);
+}
+
 .no-button {
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
-    color: #1b89bc;
+    color: var(--dark);
     text-decoration: none;
     font-size: 100%;
 }
   
   .no-button:hover {
-    color: #065b83;
+    color: var(--dark);
     text-decoration: underline;
 }
+
+.container {
+    justify-content: center;
+    align-content: center;
+}
+
+.comment-header {
+    text-align: center;
+    background-color: black;
+    color: whitesmoke;
+}
+
+/* .new-comment-form {
+    display: flex;
+    flex-direction: row;
+} */
